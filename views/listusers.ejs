@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Berties books
+    </title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+</head>
+
+<body>
+    <h1>
+        <%=shopName%> Users
+    </h1>
+    <h2>Here are some of our users</h2>
+    <!--loop to through available books and retrieve their name and price-->
+    <ul>
+        <% for(let i=0; i < users.length; i++){ %>
+            <li>
+                <%=users[i].first_name%>, <%=users[i].last_name%>
+            </li>
+            <br>
+            <%}%>
+    </ul>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Bargain Berties books
+    </title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+</head>
+
+<body>
+    <h1>
+        <%=shopName%>SALE! SALE! SALE!
+    </h1>
+    <h2>Here are some of the books that are a bargain right now</h2>
+    <ul>
+        <!--loop through and compare the price if the price is less than £20 then print the books name and price-->
+        <% for(let i=0; i < availableBooks.length; i++){ if(availableBooks[i].price < 20){%>
+            <li>
+                <%=availableBooks[i].name%>, £<%=availableBooks[i].price%>
+                        <br>
+            </li>
+            <%}%>
+                <%}%>
+    </ul>
+</body>
+
+</html>

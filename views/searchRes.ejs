@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Search Results
+    </title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+</head>
+
+<body>
+    <h1>
+        Here are the results for your for your search
+    </h1>
+    <h2>Books that matched your search</h2>
+    <ul>
+        <!--loop through and compare the price if the price is less than £20 then print the books name and price-->
+    <% for(let i=0; i < availableBooks.length; i++){ %>
+        <li>
+            <%=availableBooks[i].name%>, £<%=availableBooks[i].price%>
+        </li>
+        <br>
+    <%}%>
+</ul>
+</body>
+
+</html>
