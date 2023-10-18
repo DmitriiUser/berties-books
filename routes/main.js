@@ -46,20 +46,15 @@ module.exports = function(app, shopData) {
         // Execute the query and handle the result
         db.query(sqlquery, [username, first, last, email, hashedPassword], (err, result) => {
             if (err) {
-            res.redirect('./');
+                res.redirect('./');
             } else {
-            // Data inserted successfully
+            // Data inserted successfully:
             result = 'Hello '+ req.body.first + ' '+ req.body.last +' you are now registered!  We will send an email to you at ' + req.body.email;
             result += 'Your password is: '+ req.body.password +' and your hashed password is: '+ hashedPassword;
             res.send(result);
             }
         });
         })
-        .catch(error => {
-        // Handle password hashing errors
-        // For example, you can redirect the user to an error page or provide an error message.
-        res.redirect('./error');
-        });
     });
 
     //addbook write the name and price of the book
@@ -117,6 +112,46 @@ module.exports = function(app, shopData) {
         });                                                          
     });
 
+    //login page backend:
+    app.get('/login', function (req,res) {
+        res.render('login.ejs', shopData);                                                                     
+    }); 
 
+    app.post('/loggedin', function (req,res) {
+        //bcrypt stuff
+        const bcrypt = require('bcrypt');
+
+        const username = req.body.username;
+        let hashedPassword;
+
+        //sql query:
+        let sqlquery = `SELECT hashedPassword FROM users WHERE username='${username}'`;
+        
+        //get the username for the database and compare the passwords:
+        db.query(sqlquery, (err,response) =>{
+            if(err){
+                res.send('Username was not found!')
+            }else{
+                //username found successfully:
+                hashedPassword = response[0].hashedPassword;
+
+                console.log(hashedPassword)
+                // Compare the password supplied with the password in the database
+                 
+                bcrypt.compare(req.body.password, hashedPassword, function(err, result) {
+                    if (err) {
+                        //error:
+                        res.redirect('./');
+                    }
+                    else if (result == true) {  
+                        res.send(`Sucess! Your account has been found: ${username}`);
+                    }
+                    else {
+                        res.send("Error, incorrect username or password")
+                    }
+                });
+            }
+        });
+    });
     
 }
