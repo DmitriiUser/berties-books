@@ -14,13 +14,16 @@
     <h2>Books that matched your search</h2>
     <ul>
         <!--loop through and compare the price if the price is less than £20 then print the books name and price-->
-    <% for(let i=0; i < availableBooks.length; i++){ %>
-        <li>
-            <%=availableBooks[i].name%>, £<%=availableBooks[i].price%>
-        </li>
-        <br>
-    <%}%>
-</ul>
+        <% for(let i=0; i < availableBooks.length; i++){ %>
+            <li>
+                <%=availableBooks[i].name%>, £<%=availableBooks[i].price%>
+            </li>
+            <br>
+            <%}%>
+    </ul>
+
+    <!-- logout button -->
+    <p><a href="logout">Logout</a></p>
 </body>
 
 </html>

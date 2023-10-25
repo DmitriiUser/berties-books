@@ -1,5 +1,23 @@
 module.exports = function(app, shopData) {
 
+    //redirect to the login part:
+    const redirectLogin = (req, res, next) => {
+        if (!req.session.userId ) {
+          res.redirect('./login')
+        } else { next (); }
+    }
+
+    //logout:
+    app.get('/logout', redirectLogin, (req,res) => {
+        req.session.destroy(err => {
+        if (err) {
+          return res.redirect('./')
+        }
+        res.send('you are now logged out. <a href='+'./'+'>Home</a>');
+        })
+    })
+
+
     // Handle our routes
     app.get('/',function(req,res){
         res.render('index.ejs', shopData)
@@ -89,7 +107,7 @@ module.exports = function(app, shopData) {
     });
 
     //adds a new route to display all books:
-    app.get('/list', function (req,res) {
+    app.get('/list',redirectLogin, function (req,res) {
         let sqlquery = "SELECT * FROM books"; 
         db.query(sqlquery, (err, result) => {
         if (err) {res.redirect('./');}
@@ -101,7 +119,7 @@ module.exports = function(app, shopData) {
     });
 
     //new route to display all the users
-    app.get('/listusers', function (req,res) {
+    app.get('/listusers',redirectLogin, function (req,res) {
         let sqlquery = "SELECT * FROM users"; 
         db.query(sqlquery, (err, result) => {
         if (err) {res.redirect('./');}
@@ -144,6 +162,9 @@ module.exports = function(app, shopData) {
                         res.redirect('./');
                     }
                     else if (result == true) {  
+                        // Save user session here, when login is successful
+                        req.session.userId = req.body.username;
+
                         res.send(`Sucess! Your account has been found: ${username}`);
                     }
                     else {
