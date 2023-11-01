@@ -2,7 +2,13 @@
 var express = require ('express')
 var ejs = require('ejs')
 var bodyParser= require ('body-parser')
+//cookies:
 var session = require ('express-session');
+
+//validator - security side:
+var validator = require ('express-validator');
+//sanitiser:
+const expressSanitizer = require('express-sanitizer');
 
 //my sql:
 const mysql = require('mysql');

@@ -1,5 +1,17 @@
 module.exports = function(app, shopData) {
 
+    //validator:
+    const { check, validationResult } = require('express-validator');
+
+    //sanitiser
+    const expressSanitizer = require('express-sanitizer');
+
+
+    //sanitise:
+    app.use(expressSanitizer());
+
+
+
     //redirect to the login part:
     const redirectLogin = (req, res, next) => {
         if (!req.session.userId ) {
@@ -47,15 +59,20 @@ module.exports = function(app, shopData) {
     app.get('/register', function (req,res) {
         res.render('register.ejs', shopData);                                                                     
     });                                                                                                 
-    app.post('/registered', function (req,res) {
+    app.post('/registered',[check('email').isEmail()], function (req,res) {
+        //enter correct email or redirect back to register page
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.redirect('./register'); }
+        else {
         const bcrypt = require('bcrypt');
         const saltRounds = 10;
         const plainPassword = req.body.password;
         
-        const first = req.body.first;
-        const last = req.body.last;
-        const email = req.body.email;
-        const username = req.body.username;
+        const first = req.sanitize(req.body.first)//validates the first name
+        const last = req.sanitize(req.body.last)//validates the last name
+        const email = req.sanitize(req.body.email)//sanitises email
+        const username = req.sanitize(req.body.username)//sanitises username
 
     bcrypt.hash(plainPassword, saltRounds).then(hashedPassword => {
         // Construct the SQL query after password hashing is complete
@@ -73,6 +90,7 @@ module.exports = function(app, shopData) {
             }
         });
         })
+    }
     });
 
     //addbook write the name and price of the book
